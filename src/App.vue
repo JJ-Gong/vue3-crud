@@ -31,7 +31,7 @@
       <el-table-column fixed="right" label="操作" width="120">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="handleRowDel(scope.row)" style="color:#F56c6c">删除</el-button>
-          <el-button link type="primary" size="small">编辑</el-button>
+          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -117,6 +117,12 @@ let dialogType = $ref('add')
 
 
 // 方法
+// 编辑
+const handleEdit = (row) =>{
+  dialogFormVisible = true;
+  dialogType = 'edit'
+  tableForm={...row}
+}
 // 删除一条
 let handleRowDel = ({id}) => {
   console.log(id);
@@ -152,13 +158,20 @@ const handleAdd= () => {
 // 确认添加
 const dialogConfirm = () =>{
   dialogFormVisible = false
+  // 判断是新增还是编辑
+  if(dialogType === 'add'){
   // 1.拿到数据
   // 2.添加到table
   tableData.push({
     id:(tableData.length+1).toString(),
     ...tableForm
   })
-  console.log(tableData);
+}else{
+  // 1.获取到当前的索引
+  let index = tableData.findIndex(item=>item.id === tableForm.id)
+  // 2.更改当前索引值对应的数据
+  tableData[index]=tableForm
+}
 
 }
 </script>
